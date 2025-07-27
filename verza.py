@@ -16,9 +16,9 @@ def main():
     args = parser.parse_args()
 
     if args.command == 'init':
-        init()
+        init.run()
     elif args.command == 'add':
-        add(args.files)
+        add.run(args.files)
     else:
         parser.print_help()
 
