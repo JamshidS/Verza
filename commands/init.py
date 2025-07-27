@@ -1,14 +1,35 @@
 import os
+import configparser
+from core.repo import Repository as VerzaRepository
+
+
+def repo_dir(repo: VerzaRepository, *path):
+    return os.path.join(repo.vcsdir, *path)
+
 
 def run():
-    if os.path.exists('.verza'):
-        print("A Verza repository already exists in this directory.")
+    path = os.getcwd()
+    vcsdir = os.path.join(path, ".verza")
+
+    if os.path.exists(vcsdir):
+        print("Repository already exists.")
         return
-    
-    os.makedirs('.verza/objects', exist_ok=True)
-    os.makedirs('.verza/refs/heads', exist_ok=True)
 
-    with open('.verza/HEAD', 'w') as f:
-        f.write('ref: refs/heads/master\n')
+    os.makedirs(repo_dir(VerzaRepository(path, force=True), "objects"))
+    os.makedirs(repo_dir(VerzaRepository(path, force=True), "refs", "heads"))
 
-    print("Initialized a new Verza repository in this directory.")    
+    # Create HEAD
+    with open(repo_dir(VerzaRepository(path, force=True), "HEAD"), "w") as f:
+        f.write("ref: refs/heads/master\n")
+
+    # Create config
+    config = configparser.ConfigParser()
+    config.add_section("core")
+    config.set("core", "repository_format_version", "0")
+    config.set("core", "filemode", "false")
+    config.set("core", "bare", "false")
+
+    with open(repo_dir(VerzaRepository(path, force=True), "config"), "w") as f:
+        config.write(f)
+
+    print("Initialized empty Verza repository in .verza/")
