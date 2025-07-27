@@ -1,20 +1,17 @@
 import os
-from core.objects import hash_object
+from core.objects import Blob
+from core.repo import Repository as VerzaRepository
 
 def run(files):
-    """
-    Add files to the Verza repository by hashing them and storing them in the objects directory.
-    :param files: List of file paths to add.
-    """
+    repo = VerzaRepository(os.getcwd()) # The cwd function gets the current working directory
     for file_path in files:
         if not os.path.isfile(file_path):
-            print(f"Error: {file_path} is not a valid file.")
+            print(f"File not found: {file_path}")
             continue
 
         with open(file_path, 'rb') as f:
             data = f.read()
 
-        obj_type = 'blob'  # Default object type
-        sha1 = hash_object(data, obj_type)
-
-        print(f"Added: {file_path} ({sha1})")
+        blob = Blob(repo, data)
+        sha = blob.write()
+        print(f"Added: {file_path} ({sha})")

@@ -1,23 +1,42 @@
 import hashlib
 import zlib
 import os
+from .repo import Repository as VerzaRepository     
 
-def hash_object(data, obj_type: str = 'blob') -> str:
+class Blob:
     """
-    Hash the given data and return its SHA-1 hash as a hexadecimal string.
-    :param data: The data to hash.
-    :param obj_type: The type of the object (default is 'blob').
-    :return: The SHA-1 hash of the data as a hexadecimal string.
+    A class to represent a blob object in the Verza repository.
+    It is used to store file contents.
     """
-    header = f'{obj_type} {len(data)}\0'.encode('utf-8')
-    full_data = header + data
 
-    sha1 = hashlib.sha1(full_data).hexdigest()
-    path = os.path.join('.verza', 'objects', sha1)
+    def __init__(self, repo: VerzaRepository, data: bytes):
+        self.repo = repo
+        self.data = data
+        self.type = 'blob'
+        self.sha = None
 
-    if not os.path.exists(path):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, 'wb') as f:
-            f.write(zlib.compress(full_data))
 
-    return sha1        
+    def serialize(self) -> bytes:
+        """
+        Serialize the blob data with its type and length.
+        :return: Serialized blob data.
+        """
+        header = f'{self.type} {len(self.data)}\0'.encode('utf-8')
+        return header + self.data
+
+    def write(self) -> str:
+        """
+        Write the serialized blob data to the repository and return its SHA-1 hash.
+        :return: SHA-1 hash of the blob.
+        """
+        serialized_data = self.serialize()
+        sha1 = hashlib.sha1(serialized_data).hexdigest()
+        self.sha = sha1
+        object_path = os.path.join(self.repo.vcsdir, 'objects', sha1)
+
+        if not os.path.exists(object_path):
+            os.makedirs(os.path.dirname(object_path), exist_ok=True)
+            with open(object_path, 'wb') as f:
+                f.write(zlib.compress(serialized_data))
+
+        return sha1        
