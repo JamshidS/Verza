@@ -2,6 +2,7 @@
 
 Verza is a minimal, Git-like version control system written in Python for learning purposes.
 I am following modern **OOP** practices and improving it step-by-step.
+Verza = Version + Zeta → A future-facing version control system.
 
 ---
 
