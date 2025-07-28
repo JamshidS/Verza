@@ -1,16 +1,40 @@
-# Verza
+## 📦 Verza - Simple Version Control System
 
-A lightweight version control system inspired by Git — built from scratch to learn the internals of modern VCS tools.
+Verza is a minimal, Git-like version control system written in Python for learning purposes.
+I am following modern **OOP** practices and improving it step-by-step.
 
-## Features
-- Track file changes
-- Store snapshots as content-addressed objects
-- Commit history and branching
-- Pure CLI tool (no Git backend)
+---
 
-## Roadmap
-- [ ] Init (`verza init`)
-- [ ] Add files (`verza add`)
-- [ ] Commit (`verza commit`)
-- [ ] Status and log
-- [ ] Checkout
+## 🛠️ Available Commands
+
+You can use the following commands with the `verza.py` CLI interface:
+
+```bash
+python verza.py init
+```
+
+> Initializes a new Verza repository in the current directory.
+
+```bash
+python verza.py add <file1> <file2> ...
+```
+
+> Stages one or more files for the next commit.
+
+```bash
+python verza.py commit "<your commit message>"
+```
+
+> Commits staged files with a commit message.
+
+---
+
+## 🚀 Upcoming Features
+
+* Full-featured CLI using [`argparse`](https://docs.python.org/3/library/argparse.html) and subcommands.
+* File tracking and diffing support.
+* Branching and commit history navigation.
+* Object storage (blobs, trees, commits) similar to Git.
+* Persistent index for faster staging.
+
+
