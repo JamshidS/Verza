@@ -29,6 +29,8 @@ class Repository:
             raise Exception(f"Configuration file not found in {self.vcsdir}")
         
         if not force:
-            version = self.config.get('core', 'repository_format_version', fallback=None)
+            version = self.config.get('core', 'repositoryformatversion', fallback=None)
+            if isinstance(version, str):
+                version = int(version)
             if version != 0:
                 raise Exception(f"Unsupported repository format version: {version}")

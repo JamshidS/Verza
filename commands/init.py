@@ -25,7 +25,7 @@ def run():
     # Create config
     config = configparser.ConfigParser()
     config.add_section("core")
-    config.set("core", "repository_format_version", "0")
+    config.set("core", "repositoryformatversion", "0")
     config.set("core", "filemode", "false")
     config.set("core", "bare", "false")
 
